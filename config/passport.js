@@ -2,6 +2,11 @@ const passport = require("passport");
 const GitHubStrategy = require("passport-github2").Strategy;
 const User = require("../models/User");
 
+if (
+  process.env.GITHUB_CLIENT_ID &&
+  process.env.GITHUB_CLIENT_SECRET &&
+  process.env.GITHUB_CALLBACK_URL
+) {
 passport.use(
 	new GitHubStrategy(
 		{
@@ -39,7 +44,12 @@ passport.use(
 		}
 	)
 );
-
+}
+else {
+  console.log(
+    "GitHub OAuth env vars not set. Skipping GitHubStrategy configuration."
+  );
+}
 
 passport.serializeUser((user, done) => {
 	done(null, user.id);
